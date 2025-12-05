@@ -1,4 +1,4 @@
-#  Parcial laura y karol - Sistema de Gestión
+#  Parcial laura y karol 🌸
 
 Sistema integral de gestión de jugadores, partidos y estadísticas para el equipo sigmotaa FC. Desarrollado con FastAPI, SQLModel y HTML/CSS.
 
@@ -18,44 +18,75 @@ Este sistema permite a los entrenadores:
 - **Frontend**: HTML5, CSS3, Jinja2 Templates
 - **Despliegue**: Render / Railway / Clever Cloud
 
-##  Instalación Local
+- ### Detalle de Parámetros y Restricciones
+#### 1. Entidad: Jugador () `jugadores`
 
-### Requisitos Previos
-- Python 3.10+
-- pip
+| Campo | Tipo | Restricciones / Descripción |
+| --- | --- | --- |
+| `nombre_completo` | String | Min: 3, Max: 100 caracteres. Indexado. |
+| `numero_camiseta` | Int | Entre 1 y 99. Único en el sistema. |
+| `fecha_nacimiento` | Date | Fecha de nacimiento. |
+| `nacionalidad` | String | Min: 2, Max: 50 caracteres. |
+| `altura_cm` | Int | Entre 150 y 220 cm. |
+| `peso_kg` | Float | Entre 50.0 y 120.0 kg. |
+| `pie_dominante` | Enum | , , . `DERECHO``IZQUIERDO``AMBIDIESTRO` |
+| `posicion` | Enum | Ej: `ARQUERO`, `DEFENSA CENTRAL`, `VOLANTE OFENSIVO`, etc. |
+| `estado` | Enum | `ACTIVO` (Default), `INACTIVO`, `LESIONADO`, . `SUSPENDIDO` |
 
-### Pasos de Instalación
+###2. Partido () `partidos`
 
-1. **Clonar el repositorio**
-```bash
-git clone https://github.com/sigmotoa/Final_DEV_1.git
-cd Final_DEV_1
-```
+| Campo | Tipo | Restricciones / Descripción |
+| --- | --- | --- |
+| `rival` | String | Min: 3, Max: 100 caracteres. Nombre del equipo contrario. |
+| `fecha_partido` | Date | Fecha del encuentro. |
+| `goles_sigmotaa` | Int | Mayor o igual a 0. Goles propios. |
+| `goles_rival` | Int | Mayor o igual a 0. Goles recibidos. |
+| `es_local` | Bool | `True` si es local, `False` si es visitante. |
+| `resultado` | Enum | Calculado auto.: , , . `VICTORIA``EMPATE``DERROTA` |
+#### 3. Estadistica (`estadisticas`)
+Representa el rendimiento individual de un jugador en un partido específico. | Campo | Tipo | Restricciones / Descripción | | :--- | :--- | :--- | | `minutos_jugados` | Int | Entre 0 y 120 minutos. | | `tarjetas_amarillas`| Int | Máximo 2 por partido. | | `tarjetas_rojas` | Int | Máximo 1 por partido. |
+## 🚀 Endpoints del API
+La API está organizada en tres routers principales.
+### 👤 Jugadores (`/jugadores`)
+Gestiona la plantilla del equipo.
 
-2. **Crear entorno virtual**
-```bash
-python -m venv venv
+| Método | Endpoint | Descripción | Parámetros Body/Query |
+| --- | --- | --- | --- |
+| `POST` | `/jugadores/` | Crear un nuevo jugador. | JSON () `JugadorCreate` |
+| `GET` | `/jugadores/` | Listar todos los jugadores. | `offset` (int), `limit` (int) |
+| `GET` | `/jugadores/{jugador_id}` | Obtener detalle de un jugador. | `jugador_id` (path) |
+| `PATCH` | `/jugadores/{jugador_id}` | Actualizar datos parciales. | `jugador_id`, JSON () `JugadorUpdate` |
+| `DELETE` | `/jugadores/{jugador_id}` | Eliminar un jugador. | `jugador_id` |
+### 🏟️ Partidos (`/partidos`)
+Gestiona el calendario y resultados.
 
-# Windows
-venv\Scripts\activate
+| Método | Endpoint | Descripción | Parámetros Body/Query |
+| --- | --- | --- | --- |
+| `POST` | `/partidos/` | Registrar un nuevo partido. | JSON () `PartidoCreate` |
+| `GET` | `/partidos/` | Listar historial de partidos. | `offset`, `limit` |
+| `GET` | `/partidos/{partido_id}` | Ver detalle de un partido. | `partido_id` |
+| `GET` | `/partidos/{partido_id}/estadisticas` | **Estadísticas del partido**: Devuelve el partido con la lista de estadísticas de los jugadores que participaron. | `partido_id` |
+| `PATCH` | `/partidos/{partido_id}` | Actualizar resultado/datos. | `partido_id`, JSON Update |
+| `DELETE` | `/partidos/{partido_id}` | Eliminar partido. | `partido_id` |
+### 📊 Estadísticas (`/estadisticas`)
+Gestiona los datos de rendimiento individual por partido.
 
-# Linux/Mac
-source venv/bin/activate
-```
+| Método | Endpoint | Descripción | Parámetros Body/Query |
+| --- | --- | --- | --- |
+| `POST` | `/estadisticas/` | Crear registro estadístico. | JSON ( con `jugador_id` y `partido_id`) `EstadisticaCreate` |
+| `GET` | `/estadisticas/` | Listar todas las estadísticas. | `offset`, `limit` |
+| `GET` | `/estadisticas/{estadistica_id}` | Ver una estadística puntual. | `estadistica_id` |
+| `PATCH` | `/estadisticas/{estadistica_id}` | Actualizar datos (goles, minutos, etc). | `estadistica_id`, JSON Update |
+| `DELETE` | `/estadisticas/{estadistica_id}` | Eliminar registro. | `estadistica_id` |
 
-3. **Instalar dependencias**
+4. **Instalar dependencias**
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **Ejecutar la aplicación**
+5. **Ejecutar la aplicación**
 ```bash
 uvicorn main:app --reload
-```
-
-5. **Abrir en navegador**
-```
-http://localhost:8000
 ```
 
 ##  Estructura del Proyecto
@@ -130,42 +161,6 @@ Final_DEV_1/
 - `GET /estadisticas/{id}` - Obtener estadística
 - `DELETE /estadisticas/{id}` - Eliminar estadística
 
-## Funcionalidades Principales
-
-### RF-01: Gestión de Jugadores
--  Formulario completo con validación
--  Número de camiseta único (1-99)
--  Vista lista y detalle
--  Edición de jugadores
--  Gestión de estados (activo/inactivo/lesionado/suspendido)
-
-### RF-02: Estadísticas por Partido
--  Registro de minutos, goles, tarjetas
--  Consulta de historial por jugador
--  Actualización automática de estado por tarjetas
-
-### RF-03: Gestión de Partidos
--  Formulario con datos del encuentro
--  Cálculo automático de resultado (Victoria/Empate/Derrota)
--  Vista detalle con estadísticas de jugadores
-
-### RF-04: Interfaz HTML
--  Formularios con validación HTML5
--  Vistas organizadas en tablas
--  Navegación con menú principal
--  Mensajes de confirmación y error
-
-### RNF-01: Código Profesional
--  FastAPI con decoradores y routers
--  Separación en capas (modelos, routers, templates)
--  Validación con Pydantic/SQLModel
--  Manejo de errores con HTTPException
-
-### RNF-02: Base de Datos
--  SQLModel con table=True
--  Tres tablas con relaciones (jugadores, partidos, estadísticas)
--  Persistencia de datos
-
 
 ### Comandos Render/Railway
 ```bash
@@ -193,23 +188,3 @@ uvicorn main:app --host 0.0.0.0 --port $PORT
 - Rendimiento individual (minutos, goles, asistencias, tarjetas)
 - Foreign keys: jugador_id, partido_id
 
-##  Datos de Prueba
-
-Ejecutar en la consola de Python:
-```python
-from create_test_data import crear_datos_prueba
-crear_datos_prueba()
-```
-
-
-
-Desarrollado para el examen final de Desarrollo 1
-
-
-- **Repositorio GitHub**: [https://github.com/sigmotoa/Final_DEV_1](https://github.com/kmcotame26/Parcial_Final_DEV_1)
-
-- **URL de Despliegue**: 
-
-- **Documentación API**: 
-
-##  Licencia

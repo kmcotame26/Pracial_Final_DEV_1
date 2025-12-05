@@ -3,11 +3,11 @@
 {% block title %}Nueva Estadística - sigmotaa FC{% endblock %}
 
 {% block content %}
-<h2 style="color: #2d3748; margin-bottom: 30px;">📊 Registrar Estadísticas de Partido</h2>
+<h2 style="color: #2d3748; margin-bottom: 30px;"> Registrar Estadísticas de Partido</h2>
 
 <form method="post" action="/estadisticas/html/crear" style="max-width: 900px;">
     <div style="background: #f7fafc; padding: 25px; border-radius: 10px; margin-bottom: 20px;">
-        <h3 style="color: #667eea; margin-bottom: 20px;">🎯 Seleccionar Jugador y Partido</h3>
+        <h3 style="color: #667eea; margin-bottom: 20px;"> Seleccionar Jugador y Partido</h3>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             <div class="form-group">
@@ -51,17 +51,17 @@
     </div>
     
     <div style="background: #f7fafc; padding: 25px; border-radius: 10px; margin-bottom: 20px;">
-        <h3 style="color: #667eea; margin-bottom: 20px;">⚽ Estadísticas Ofensivas</h3>
+        <h3 style="color: #667eea; margin-bottom: 20px;">Estadísticas Ofensivas</h3>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             <div class="form-group">
-                <label for="goles_anotados">⚽ Goles Anotados</label>
+                <label for="goles_anotados"> Goles Anotados</label>
                 <input type="number" id="goles_anotados" name="goles_anotados" 
                        min="0" value="0">
             </div>
             
             <div class="form-group">
-                <label for="asistencias">🎯 Asistencias</label>
+                <label for="asistencias"> Asistencias</label>
                 <input type="number" id="asistencias" name="asistencias" 
                        min="0" value="0">
             </div>
@@ -69,17 +69,17 @@
     </div>
     
     <div style="background: #f7fafc; padding: 25px; border-radius: 10px; margin-bottom: 20px;">
-        <h3 style="color: #667eea; margin-bottom: 20px;">🛡️ Estadísticas Defensivas</h3>
+        <h3 style="color: #667eea; margin-bottom: 20px;"> Estadísticas Defensivas</h3>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             <div class="form-group">
-                <label for="intercepciones">🔒 Intercepciones</label>
+                <label for="intercepciones">Intercepciones</label>
                 <input type="number" id="intercepciones" name="intercepciones" 
                        min="0" value="0">
             </div>
             
             <div class="form-group">
-                <label for="balones_recuperados">🏃 Balones Recuperados</label>
+                <label for="balones_recuperados"> Balones Recuperados</label>
                 <input type="number" id="balones_recuperados" name="balones_recuperados" 
                        min="0" value="0">
             </div>
@@ -87,23 +87,23 @@
     </div>
     
     <div style="background: #fff5f5; padding: 25px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #f56565;">
-        <h3 style="color: #742a2a; margin-bottom: 20px;">🚨 Disciplina</h3>
+        <h3 style="color: #742a2a; margin-bottom: 20px;"> Disciplina</h3>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
             <div class="form-group">
-                <label for="tarjetas_amarillas">🟨 Tarjetas Amarillas (0-2)</label>
+                <label for="tarjetas_amarillas"> Tarjetas Amarillas (0-2)</label>
                 <input type="number" id="tarjetas_amarillas" name="tarjetas_amarillas" 
                        min="0" max="2" value="0">
             </div>
             
             <div class="form-group">
-                <label for="tarjetas_rojas">🟥 Tarjetas Rojas (0-1)</label>
+                <label for="tarjetas_rojas"> Tarjetas Rojas (0-1)</label>
                 <input type="number" id="tarjetas_rojas" name="tarjetas_rojas" 
                        min="0" max="1" value="0">
             </div>
             
             <div class="form-group">
-                <label for="faltas_cometidas">⚠️ Faltas Cometidas</label>
+                <label for="faltas_cometidas">️ Faltas Cometidas</label>
                 <input type="number" id="faltas_cometidas" name="faltas_cometidas" 
                        min="0" value="0">
             </div>
@@ -115,13 +115,13 @@
     </div>
     
     <div style="display: flex; gap: 15px;">
-        <button type="submit" class="btn btn-success">✅ Registrar Estadísticas</button>
-        <a href="/partidos/html/lista" class="btn btn-secondary">❌ Cancelar</a>
+        <button type="submit" class="btn btn-success"> Registrar Estadísticas</button>
+        <a href="/partidos/html/lista" class="btn btn-secondary">Cancelar</a>
     </div>
 </form>
 
 <script>
-    // Advertencia de suspensión
+
     const tarjetasAmarillas = document.getElementById('tarjetas_amarillas');
     const tarjetasRojas = document.getElementById('tarjetas_rojas');
     const suspensionWarning = document.getElementById('suspension-warning');
@@ -140,7 +140,7 @@
     tarjetasAmarillas.addEventListener('input', checkSuspension);
     tarjetasRojas.addEventListener('input', checkSuspension);
     
-    // Validación de formulario
+
     document.querySelector('form').addEventListener('submit', function(e) {
         const minutos = parseInt(document.getElementById('minutos_jugados').value);
         const ta = parseInt(tarjetasAmarillas.value);

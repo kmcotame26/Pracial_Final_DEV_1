@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Nuevo Partido - sigmotaa FC{% endblock %}
+
+{% block content %}
+<h2 style="color: #2d3748; margin-bottom: 30px;">⚽ Registrar Nuevo Partido</h2>
+
+<form method="post" action="/partidos/html/crear" style="max-width: 800px;">
+    <div style="background: #f7fafc; padding: 25px; border-radius: 10px; margin-bottom: 20px;">
+        <h3 style="color: #667eea; margin-bottom: 20px;">📅 Información del Partido</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="rival">Equipo Rival *</label>
+                <input type="text" id="rival" name="rival" required minlength="3" maxlength="100" 
+                       placeholder="Ej: Deportivo Cali">
+            </div>
+            
+            <div class="form-group">
+                <label for="fecha_partido">Fecha del Partido *</label>
+                <input type="date" id="fecha_partido" name="fecha_partido" required>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="estadio">Estadio (opcional)</label>
+            <input type="text" id="estadio" name="estadio" maxlength="200" 
+                   placeholder="Ej: Estadio Olímpico">
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+            <input type="checkbox" id="es_local" name="es_local" value="true" checked 
+                   style="width: auto; height: 20px;">
+            <label for="es_local" style="margin: 0; cursor: pointer;">
+                🏠 Partido de local (marcar si sigmotaa FC juega en casa)
+            </label>
+        </div>
+    </div>
+    
+    <div style="background: #f7fafc; padding: 25px; border-radius: 10px; margin-bottom: 20px;">
+        <h3 style="color: #667eea; margin-bottom: 20px;">🎯 Resultado del Partido</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="goles_sigmotaa">Goles de sigmotaa FC *</label>
+                <input type="number" id="goles_sigmotaa" name="goles_sigmotaa" required min="0" value="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="goles_rival">Goles del Rival *</label>
+                <input type="number" id="goles_rival" name="goles_rival" required min="0" value="0">
+            </div>
+        </div>
+        
+        <div id="resultado-preview" style="text-align: center; padding: 20px; background: white; border-radius: 10px; margin-top: 15px;">
+            <h4 style="color: #718096; margin-bottom: 10px;">Vista Previa del Resultado:</h4>
+            <div id="marcador-preview" style="font-size: 2em; font-weight: bold; color: #667eea; margin: 10px 0;">
+                0 - 0
+            </div>
+            <div id="estado-preview" class="badge" style="font-size: 1.1em; padding: 10px 20px;">
+                EMPATE
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label for="observaciones">Observaciones (opcional)</label>
+        <textarea id="observaciones" name="observaciones" rows="3" maxlength="500" 
+                  placeholder="Notas adicionales sobre el partido..."></textarea>
+    </div>
+    
+    <div style="display: flex; gap: 15px;">
+        <button type="submit" class="btn btn-success">✅ Registrar Partido</button>
+        <a href="/partidos/html/lista" class="btn btn-secondary">❌ Cancelar</a>
+    </div>
+</form>
+
+<script>
+    // Vista previa en tiempo real del resultado
+    const golesSigmotaa = document.getElementById('goles_sigmotaa');
+    const golesRival = document.getElementById('goles_rival');
+    const marcadorPreview = document.getElementById('marcador-preview');
+    const estadoPreview = document.getElementById('estado-preview');
+    
+    function actualizarPreview() {
+        const gs = parseInt(golesSigmotaa.value) || 0;
+        const gr = parseInt(golesRival.value) || 0;
+        
+        marcadorPreview.textContent = `${gs} - ${gr}`;
+        
+        let resultado, clase;
+        if (gs > gr) {
+            resultado = '🏆 VICTORIA';
+            clase = 'badge-success';
+        } else if (gs < gr) {
+            resultado = '❌ DERROTA';
+            clase = 'badge-danger';
+        } else {
+            resultado = '⚖️ EMPATE';
+            clase = 'badge-warning';
+        }
+        
+        estadoPreview.textContent = resultado;
+        estadoPreview.className = 'badge ' + clase;
+        estadoPreview.style.fontSize = '1.1em';
+        estadoPreview.style.padding = '10px 20px';
+    }
+    
+    golesSigmotaa.addEventListener('input', actualizarPreview);
+    golesRival.addEventListener('input', actualizarPreview);
+    
+    // Validación de fecha (no puede ser futura más de 1 día)
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const fecha = new Date(document.getElementById('fecha_partido').value);
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        
+        // Permitir hasta mañana
+        const maxFecha = new Date(hoy);
+        maxFecha.setDate(maxFecha.getDate() + 1);
+        
+        if (fecha > maxFecha) {
+            e.preventDefault();
+            alert('La fecha del partido no puede ser más de un día en el futuro');
+        }
+    });
+</script>
+{% endblock %}

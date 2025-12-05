@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+block title Partidos - sigmotaa FC{% endblock %}
+
+ block content
+<div style="margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;">
+    <h2 style="color: #2d3748;">⚽ Historial de Partidos</h2>
+    <a href="/partidos/html/crear" class="btn btn-success">➕ Nuevo Partido</a>
+</div>
+
+ if partidos
+<div class="stats-grid" style="margin-bottom: 30px;">
+    <div class="stat-card" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);">
+        <div class="stat-label">VICTORIAS</div>
+        <div class="stat-value">{{ estadisticas.victorias }}</div>
+        <div class="stat-label">{{ (estadisticas.victorias / estadisticas.total * 100)|round|int }}%</div>
+    </div>
+    
+    <div class="stat-card" style="background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);">
+        <div class="stat-label">EMPATES</div>
+        <div class="stat-value">{{ estadisticas.empates }}</div>
+        <div class="stat-label">{{ (estadisticas.empates / estadisticas.total * 100)|round|int }}%</div>
+    </div>
+    
+    <div class="stat-card" style="background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);">
+        <div class="stat-label">DERROTAS</div>
+        <div class="stat-value">{{ estadisticas.derrotas }}</div>
+        <div class="stat-label">{{ (estadisticas.derrotas / estadisticas.total * 100)|round|int }}%</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-label">DIFERENCIA DE GOLES</div>
+        <div class="stat-value" style="color: {% if estadisticas.diferencia > 0 %}#48bb78{% elif estadisticas.diferencia < 0 %}#f56565{% else %}white{% endif %}">
+            {% if estadisticas.diferencia > 0 %}+{% endif %}{{ estadisticas.diferencia }}
+        </div>
+        <div class="stat-label">{{ estadisticas.goles_favor }} - {{ estadisticas.goles_contra }}</div>
+    </div>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Rival</th>
+            <th>Resultado</th>
+            <th>Marcador</th>
+            <th>Local/Visitante</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for partido in partidos %}
+        <tr>
+            <td><strong>{{ partido.fecha_partido.strftime('%d/%m/%Y') }}</strong></td>
+            <td>{{ partido.rival }}</td>
+            <td>
+                {% if partido.resultado.value == 'VICTORIA' %}
+                <span class="badge badge-success">🏆 {{ partido.resultado.value }}</span>
+                {% elif partido.resultado.value == 'EMPATE' %}
+                <span class="badge badge-warning">⚖️ {{ partido.resultado.value }}</span>
+                {% else %}
+                <span class="badge badge-danger">❌ {{ partido.resultado.value }}</span>
+                {% endif %}
+            </td>
+            <td style="font-size: 1.2em; font-weight: bold;">
+                <span style="color: #667eea;">{{ partido.goles_sigmotaa }}</span>
+                -
+                <span style="color: #718096;">{{ partido.goles_rival }}</span>
+            </td>
+            <td>
+                {% if partido.es_local %}
+                <span class="badge badge-info">🏠 LOCAL</span>
+                {% else %}
+                <span class="badge">✈️ VISITANTE</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if partido.estadio %}
+                {{ partido.estadio }}
+                {% else %}
+                -
+                {% endif %}
+            </td>
+            <td>
+                <a href="/partidos/html/detalle/{{ partido.id }}" class="btn" style="padding: 8px 16px; font-size: 14px;">Ver Detalle</a>
+                <a href="/estadisticas/html/crear?partido_id={{ partido.id }}" class="btn btn-success" style="padding: 8px 16px; font-size: 14px;">➕ Stats</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="alert alert-info">
+    <strong>ℹ️ No hay partidos registrados</strong><br>
+    Comienza agregando tu primer partido.
+</div>
+<div style="text-align: center; margin-top: 30px;">
+    <a href="/partidos/html/crear" class="btn btn-success" style="font-size: 18px; padding: 15px 30px;">➕ Registrar Primer Partido</a>
+</div>
+{% endif %}
+{% endblock %}

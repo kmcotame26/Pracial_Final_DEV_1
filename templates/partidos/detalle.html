@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}Partido vs {{ partido.rival }} - sigmotaa FC{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 20px;">
+    <a href="/partidos/html/lista" class="btn btn-secondary">← Volver a Partidos</a>
+    <a href="/estadisticas/html/crear?partido_id={{ partido.id }}" class="btn btn-success">➕ Agregar Estadística</a>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 30px;">
+    <div style="text-align: center;">
+        <p style="opacity: 0.9; margin-bottom: 10px;">
+            {{ partido.fecha_partido.strftime('%d de %B, %Y') }}
+        </p>
+        <h2 style="margin-bottom: 20px;">
+            sigmotaa FC vs {{ partido.rival }}
+        </h2>
+        
+        <div style="display: flex; justify-content: center; align-items: center; gap: 30px; margin: 30px 0;">
+            <div style="text-align: center;">
+                <div style="font-size: 1.2em; margin-bottom: 10px;">sigmotaa FC</div>
+                <div style="font-size: 4em; font-weight: bold;">{{ partido.goles_sigmotaa }}</div>
+            </div>
+            <div style="font-size: 3em; opacity: 0.7;">-</div>
+            <div style="text-align: center;">
+                <div style="font-size: 1.2em; margin-bottom: 10px;">{{ partido.rival }}</div>
+                <div style="font-size: 4em; font-weight: bold;">{{ partido.goles_rival }}</div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            {% if partido.resultado.value == 'VICTORIA' %}
+            <span style="background: rgba(255,255,255,0.3); padding: 12px 30px; border-radius: 25px; font-size: 1.3em; font-weight: bold;">
+                🏆 VICTORIA
+            </span>
+            {% elif partido.resultado.value == 'EMPATE' %}
+            <span style="background: rgba(255,255,255,0.3); padding: 12px 30px; border-radius: 25px; font-size: 1.3em; font-weight: bold;">
+                ⚖️ EMPATE
+            </span>
+            {% else %}
+            <span style="background: rgba(255,255,255,0.3); padding: 12px 30px; border-radius: 25px; font-size: 1.3em; font-weight: bold;">
+                ❌ DERROTA
+            </span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+    <div class="card">
+        <h3 style="color: #667eea; margin-bottom: 15px;">📍 Información del Partido</h3>
+        <div style="color: #4a5568;">
+            <p><strong>Fecha:</strong> {{ partido.fecha_partido.strftime('%d/%m/%Y') }}</p>
+            <p><strong>Condición:</strong> 
+                {% if partido.es_local %}
+                <span class="badge badge-info">🏠 LOCAL</span>
+                {% else %}
+                <span class="badge">✈️ VISITANTE</span>
+                {% endif %}
+            </p>
+            {% if partido.estadio %}
+            <p><strong>Estadio:</strong> {{ partido.estadio }}</p>
+            {% endif %}
+            <p><strong>Registrado el:</strong> {{ partido.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</p>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h3 style="color: #667eea; margin-bottom: 15px;">📊 Estadísticas del Partido</h3>
+        <div style="color: #4a5568;">
+            <p><strong>Jugadores Participantes:</strong> {{ partido.estadisticas|length }}</p>
+            <p><strong>Goles Totales:</strong> {{ partido.goles_sigmotaa + partido.goles_rival }}</p>
+            {% if partido.observaciones %}
+            <p><strong>Observaciones:</strong> {{ partido.observaciones }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3 style="color: #667eea; margin-bottom: 20px;">👥 Jugadores Participantes</h3>
+    
+    {% if partido.estadisticas %}
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Jugador</th>
+                <th>Minutos</th>
+                <th>⚽ Goles</th>
+                <th>🎯 Asistencias</th>
+                <th>🛡️ Intercepciones</th>
+                <th>🟨 TA</th>
+                <th>🟥 TR</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for est in partido.estadisticas|sort(attribute='jugador.numero_camiseta') %}
+            <tr>
+                <td><strong>{{ est.jugador.numero_camiseta }}</strong></td>
+                <td>{{ est.jugador.nombre_completo }}</td>
+                <td>{{ est.minutos_jugados }}'</td>
+                <td style="text-align: center;">
+                    {% if est.goles_anotados > 0 %}
+                    <strong style="color: #48bb78;">{{ est.goles_anotados }}</strong>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td style="text-align: center;">
+                    {% if est.asistencias > 0 %}
+                    <strong style="color: #4299e1;">{{ est.asistencias }}</strong>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td style="text-align: center;">{{ est.intercepciones }}</td>
+                <td style="text-align: center;">
+                    {% if est.tarjetas_amarillas > 0 %}
+                    <span style="color: #ecc94b;">{{ est.tarjetas_amarillas }}</span>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td style="text-align: center;">
+                    {% if est.tarjetas_rojas > 0 %}
+                    <span style="color: #f56565;">{{ est.tarjetas_rojas }}</span>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/jugadores/html/detalle/{{ est.jugador.id }}" class="btn" style="padding: 6px 12px; font-size: 13px;">
+                        Ver Jugador
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div style="margin-top: 20px; padding: 15px; background: #f7fafc; border-radius: 8px;">
+        <h4 style="color: #2d3748; margin-bottom: 10px;">📈 Resumen del Equipo</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+            <div>
+                <strong>Total Minutos:</strong> {{ partido.estadisticas|sum(attribute='minutos_jugados') }}'
+            </div>
+            <div>
+                <strong>Total Goles:</strong> {{ partido.estadisticas|sum(attribute='goles_anotados') }}
+            </div>
+            <div>
+                <strong>Total Asistencias:</strong> {{ partido.estadisticas|sum(attribute='asistencias') }}
+            </div>
+            <div>
+                <strong>Tarjetas Amarillas:</strong> {{ partido.estadisticas|sum(attribute='tarjetas_amarillas') }}
+            </div>
+            <div>
+                <strong>Tarjetas Rojas:</strong> {{ partido.estadisticas|sum(attribute='tarjetas_rojas') }}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <strong>ℹ️ No hay estadísticas registradas para este partido</strong><br>
+        Agrega las estadísticas de los jugadores que participaron en este encuentro.
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/estadisticas/html/crear?partido_id={{ partido.id }}" class="btn btn-success" style="font-size: 16px; padding: 12px 24px;">
+            ➕ Agregar Primera Estadística
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

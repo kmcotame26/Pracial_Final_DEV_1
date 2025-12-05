@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - sigmotaa FC{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 40px 20px;">
+    <h1 style="color: #667eea; font-size: 3em; margin-bottom: 20px;">
+        Bienvenido a sigmotaa FC
+    </h1>
+    <p style="font-size: 1.3em; color: #4a5568; margin-bottom: 40px;">
+        Sistema Integral de Gestión de Jugadores y Análisis de Partidos
+    </p>
+    
+    <div class="stats-grid" style="max-width: 900px; margin: 0 auto;">
+        <div class="stat-card">
+            <div class="stat-label">GESTIÓN</div>
+            <div class="stat-value">👥</div>
+            <div class="stat-label">Jugadores</div>
+            <a href="/jugadores/html/lista" class="btn" style="margin-top: 15px; background: white; color: #667eea;">Ver Jugadores</a>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-label">HISTORIAL</div>
+            <div class="stat-value">⚽</div>
+            <div class="stat-label">Partidos</div>
+            <a href="/partidos/html/lista" class="btn" style="margin-top: 15px; background: white; color: #667eea;">Ver Partidos</a>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-label">ANÁLISIS</div>
+            <div class="stat-value">📊</div>
+            <div class="stat-label">Estadísticas</div>
+            <a href="/docs" class="btn" style="margin-top: 15px; background: white; color: #667eea;">API Docs</a>
+        </div>
+    </div>
+</div>
+
+<div style="max-width: 800px; margin: 40px auto;">
+    <h2 style="color: #2d3748; margin-bottom: 20px; text-align: center;">Características Principales</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+        <div class="card">
+            <h3 style="color: #667eea; margin-bottom: 10px;">📋 Registro Completo</h3>
+            <p style="color: #4a5568;">Datos personales y deportivos de cada jugador del plantel</p>
+        </div>
+        
+        <div class="card">
+            <h3 style="color: #667eea; margin-bottom: 10px;">📊 Estadísticas Detalladas</h3>
+            <p style="color: #4a5568;">Seguimiento partido a partido del desempeño individual</p>
+        </div>
+        
+        <div class="card">
+            <h3 style="color: #667eea; margin-bottom: 10px;">⚽ Historial de Partidos</h3>
+            <p style="color: #4a5568;">Registro completo de encuentros con resultados automáticos</p>
+        </div>
+        
+        <div class="card">
+            <h3 style="color: #667eea; margin-bottom: 10px;">🎯 Estados de Jugadores</h3>
+            <p style="color: #4a5568;">Control de activos, lesionados y suspendidos</p>
+        </div>
+    </div>
+</div>
+
+<div style="text-align: center; margin-top: 50px; padding: 30px; background: #f7fafc; border-radius: 10px;">
+    <h2 style="color: #2d3748; margin-bottom: 15px;">Acciones Rápidas</h2>
+    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+        <a href="/jugadores/html/crear" class="btn btn-success">➕ Registrar Jugador</a>
+        <a href="/partidos/html/crear" class="btn btn-success">➕ Registrar Partido</a>
+        <a href="/estadisticas/html/crear" class="btn">📊 Agregar Estadística</a>
+    </div>
+</div>
+{% endblock %}

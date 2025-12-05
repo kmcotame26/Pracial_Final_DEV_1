@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Historial de {{ jugador.nombre_completo }} - sigmotaa FC{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 20px;">
+    <a href="/jugadores/html/detalle/{{ jugador.id }}" class="btn btn-secondary">← Volver al Jugador</a>
+    <a href="/jugadores/html/lista" class="btn">👥 Todos los Jugadores</a>
+</div>
+
+<div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: #2d3748; margin-bottom: 10px;">
+        #{{ jugador.numero_camiseta }} {{ jugador.nombre_completo }}
+    </h1>
+    <p style="color: #718096; font-size: 1.2em;">{{ jugador.posicion.value }}</p>
+</div>
+
+{% if estadisticas %}
+<div class="stats-grid" style="margin-bottom: 30px;">
+    <div class="stat-card">
+        <div class="stat-label">PARTIDOS</div>
+        <div class="stat-value">{{ totales.partidos_jugados }}</div>
+        <div class="stat-label">Jugados</div>
+    </div>
+    
+    <div class="stat-card" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);">
+        <div class="stat-label">GOLES</div>
+        <div class="stat-value">{{ totales.goles_totales }}</div>
+        <div class="stat-label">Anotados</div>
+    </div>
+    
+    <div class="stat-card" style="background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);">
+        <div class="stat-label">ASISTENCIAS</div>
+        <div class="stat-value">{{ totales.asistencias_totales }}</div>
+        <div class="stat-label">Totales</div>
+    </div>
+    
+    <div class="stat-card" style="background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);">
+        <div class="stat-label">MINUTOS</div>
+        <div class="stat-value">{{ totales.minutos_totales }}</div>
+        <div class="stat-label">En Cancha</div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+    <div class="card">
+        <h3 style="color: #667eea; margin-bottom: 15px;">🛡️ Estadísticas Defensivas</h3>
+        <div style="color: #4a5568;">
+            <p><strong>Intercepciones:</strong> {{ totales.intercepciones_totales }}</p>
+            <p><strong>Balones Recuperados:</strong> {{ totales.balones_recuperados_totales }}</p>
+            <p><strong>Promedio por Partido:</strong> 
+                {{ (totales.intercepciones_totales / totales.partidos_jugados)|round(1) }} intercepciones
+            </p>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h3 style="color: #667eea; margin-bottom: 15px;">🚨 Disciplina</h3>
+        <div style="color: #4a5568;">
+            <p><strong>🟨 Tarjetas Amarillas:</strong> {{ totales.tarjetas_amarillas }}</p>
+            <p><strong>🟥 Tarjetas Rojas:</strong> {{ totales.tarjetas_rojas }}</p>
+            {% if totales.tarjetas_amarillas + totales.tarjetas_rojas > 0 %}
+            <p style="color: #e53e3e;"><strong>⚠️ Total de Tarjetas:</strong> {{ totales.tarjetas_amarillas + totales.tarjetas_rojas }}</p>
+            {% else %}
+            <p style="color: #48bb78;"><strong>✅ Sin tarjetas</strong></p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3 style="color: #667eea; margin-bottom: 20px;">📋 Historial Partido por Partido</h3>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Rival</th>
+                <th>Resultado</th>
+                <th>⏱️</th>
+                <th>⚽</th>
+                <th>🎯</th>
+                <th>🛡️</th>
+                <th>🟨</th>
+                <th>🟥</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for est in estadisticas %}
+            <tr>
+                <td>{{ est.partido.fecha_partido.strftime('%d/%m/%Y') }}</td>
+                <td>{{ est.partido.rival }}</td>
+                <td>
+                    <strong style="color: #667eea;">{{ est.partido.goles_sigmotaa }}</strong>
+                    -
+                    <strong style="color: #718096;">{{ est.partido.goles_rival }}</strong>
+                    
+                    {% if est.partido.resultado.value == 'VICTORIA' %}
+                    <span class="badge badge-success" style="margin-left: 5px;">V</span>
+                    {% elif est.partido.resultado.value == 'EMPATE' %}
+                    <span class="badge badge-warning" style="margin-left: 5px;">E</span>
+                    {% else %}
+                    <span class="badge badge-danger" style="margin-left: 5px;">D</span>
+                    {% endif %}
+                </td>
+                <td>{{ est.minutos_jugados }}'</td>
+                <td style="text-align: center;">
+                    {% if est.goles_anotados > 0 %}
+                    <strong style="color: #48bb78; font-size: 1.1em;">{{ est.goles_anotados }}</strong>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td style="text-align: center;">
+                    {% if est.asistencias > 0 %}
+                    <strong style="color: #4299e1;">{{ est.asistencias }}</strong>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td style="text-align: center;">{{ est.intercepciones }}</td>
+                <td style="text-align: center;">
+                    {% if est.tarjetas_amarillas > 0 %}
+                    <span style="color: #ecc94b; font-weight: bold;">{{ est.tarjetas_amarillas }}</span>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td style="text-align: center;">
+                    {% if est.tarjetas_rojas > 0 %}
+                    <span style="color: #f56565; font-weight: bold;">{{ est.tarjetas_rojas }}</span>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/partidos/html/detalle/{{ est.partido.id }}" class="btn" style="padding: 6px 12px; font-size: 13px;">
+                        Ver Partido
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div style="margin-top: 30px; padding: 20px; background: #f7fafc; border-radius: 10px;">
+    <h4 style="color: #2d3748; margin-bottom: 15px;">📊 Promedios por Partido</h4>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; color: #4a5568;">
+        <div>
+            <strong>Minutos:</strong> {{ (totales.minutos_totales / totales.partidos_jugados)|round(1) }}'
+        </div>
+        <div>
+            <strong>Goles:</strong> {{ (totales.goles_totales / totales.partidos_jugados)|round(2) }}
+        </div>
+        <div>
+            <strong>Asistencias:</strong> {{ (totales.asistencias_totales / totales.partidos_jugados)|round(2) }}
+        </div>
+        <div>
+            <strong>Intercepciones:</strong> {{ (totales.intercepciones_totales / totales.partidos_jugados)|round(1) }}
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="alert alert-info">
+    <strong>ℹ️ Sin estadísticas registradas</strong><br>
+    Este jugador aún no tiene estadísticas en ningún partido.
+</div>
+<div style="text-align: center; margin-top: 30px;">
+    <a href="/partidos/html/lista" class="btn btn-success" style="font-size: 16px; padding: 12px 24px;">
+        Ver Partidos Disponibles
+    </a>
+</div>
+{% endif %}
+{% endblock %}

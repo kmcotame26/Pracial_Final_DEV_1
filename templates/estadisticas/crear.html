@@ -1,0 +1,168 @@
+% extends "base.html" %}
+
+{% block title %}Nueva Estadística - sigmotaa FC{% endblock %}
+
+{% block content %}
+<h2 style="color: #2d3748; margin-bottom: 30px;">📊 Registrar Estadísticas de Partido</h2>
+
+<form method="post" action="/estadisticas/html/crear" style="max-width: 900px;">
+    <div style="background: #f7fafc; padding: 25px; border-radius: 10px; margin-bottom: 20px;">
+        <h3 style="color: #667eea; margin-bottom: 20px;">🎯 Seleccionar Jugador y Partido</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="jugador_id">Jugador *</label>
+                <select id="jugador_id" name="jugador_id" required>
+                    <option value="">Seleccione un jugador...</option>
+                    {% for jugador in jugadores %}
+                    <option value="{{ jugador.id }}">
+                        #{{ jugador.numero_camiseta }} - {{ jugador.nombre_completo }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="partido_id">Partido *</label>
+                <select id="partido_id" name="partido_id" required>
+                    <option value="">Seleccione un partido...</option>
+                    {% for p in partidos %}
+                    <option value="{{ p.id }}" 
+                            {% if partido_seleccionado and p.id == partido_seleccionado.id %}selected{% endif %}>
+                        {{ p.fecha_partido.strftime('%d/%m/%Y') }} - vs {{ p.rival }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div style="background: #f7fafc; padding: 25px; border-radius: 10px; margin-bottom: 20px;">
+        <h3 style="color: #667eea; margin-bottom: 20px;">⏱️ Tiempo de Juego</h3>
+        
+        <div class="form-group">
+            <label for="minutos_jugados">Minutos Jugados (0-120) *</label>
+            <input type="number" id="minutos_jugados" name="minutos_jugados" 
+                   required min="0" max="120" value="90">
+            <p style="font-size: 0.9em; color: #718096; margin-top: 5px;">
+                90 minutos = partido completo | Máximo 120 con tiempo extra
+            </p>
+        </div>
+    </div>
+    
+    <div style="background: #f7fafc; padding: 25px; border-radius: 10px; margin-bottom: 20px;">
+        <h3 style="color: #667eea; margin-bottom: 20px;">⚽ Estadísticas Ofensivas</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="goles_anotados">⚽ Goles Anotados</label>
+                <input type="number" id="goles_anotados" name="goles_anotados" 
+                       min="0" value="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="asistencias">🎯 Asistencias</label>
+                <input type="number" id="asistencias" name="asistencias" 
+                       min="0" value="0">
+            </div>
+        </div>
+    </div>
+    
+    <div style="background: #f7fafc; padding: 25px; border-radius: 10px; margin-bottom: 20px;">
+        <h3 style="color: #667eea; margin-bottom: 20px;">🛡️ Estadísticas Defensivas</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="intercepciones">🔒 Intercepciones</label>
+                <input type="number" id="intercepciones" name="intercepciones" 
+                       min="0" value="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="balones_recuperados">🏃 Balones Recuperados</label>
+                <input type="number" id="balones_recuperados" name="balones_recuperados" 
+                       min="0" value="0">
+            </div>
+        </div>
+    </div>
+    
+    <div style="background: #fff5f5; padding: 25px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #f56565;">
+        <h3 style="color: #742a2a; margin-bottom: 20px;">🚨 Disciplina</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="tarjetas_amarillas">🟨 Tarjetas Amarillas (0-2)</label>
+                <input type="number" id="tarjetas_amarillas" name="tarjetas_amarillas" 
+                       min="0" max="2" value="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="tarjetas_rojas">🟥 Tarjetas Rojas (0-1)</label>
+                <input type="number" id="tarjetas_rojas" name="tarjetas_rojas" 
+                       min="0" max="1" value="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="faltas_cometidas">⚠️ Faltas Cometidas</label>
+                <input type="number" id="faltas_cometidas" name="faltas_cometidas" 
+                       min="0" value="0">
+            </div>
+        </div>
+        
+        <div id="suspension-warning" style="display: none; margin-top: 15px; padding: 12px; background: #fed7d7; border-radius: 8px; color: #742a2a;">
+            <strong>⚠️ ADVERTENCIA:</strong> Este jugador será marcado como SUSPENDIDO por acumulación de tarjetas.
+        </div>
+    </div>
+    
+    <div style="display: flex; gap: 15px;">
+        <button type="submit" class="btn btn-success">✅ Registrar Estadísticas</button>
+        <a href="/partidos/html/lista" class="btn btn-secondary">❌ Cancelar</a>
+    </div>
+</form>
+
+<script>
+    // Advertencia de suspensión
+    const tarjetasAmarillas = document.getElementById('tarjetas_amarillas');
+    const tarjetasRojas = document.getElementById('tarjetas_rojas');
+    const suspensionWarning = document.getElementById('suspension-warning');
+    
+    function checkSuspension() {
+        const ta = parseInt(tarjetasAmarillas.value) || 0;
+        const tr = parseInt(tarjetasRojas.value) || 0;
+        
+        if (tr > 0 || ta >= 2) {
+            suspensionWarning.style.display = 'block';
+        } else {
+            suspensionWarning.style.display = 'none';
+        }
+    }
+    
+    tarjetasAmarillas.addEventListener('input', checkSuspension);
+    tarjetasRojas.addEventListener('input', checkSuspension);
+    
+    // Validación de formulario
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const minutos = parseInt(document.getElementById('minutos_jugados').value);
+        const ta = parseInt(tarjetasAmarillas.value);
+        const tr = parseInt(tarjetasRojas.value);
+        
+        if (minutos < 0 || minutos > 120) {
+            e.preventDefault();
+            alert('Los minutos jugados deben estar entre 0 y 120');
+            return;
+        }
+        
+        if (ta > 2) {
+            e.preventDefault();
+            alert('Un jugador no puede tener más de 2 tarjetas amarillas');
+            return;
+        }
+        
+        if (tr > 1) {
+            e.preventDefault();
+            alert('Un jugador no puede tener más de 1 tarjeta roja');
+            return;
+        }
+    });
+</script>
+{% endblock %}

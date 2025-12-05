@@ -77,12 +77,6 @@
                 <th>Fecha</th>
                 <th>Rival</th>
                 <th>Resultado</th>
-                <th>⏱️</th>
-                <th>⚽</th>
-                <th>🎯</th>
-                <th>🛡️</th>
-                <th>🟨</th>
-                <th>🟥</th>
                 <th>Acciones</th>
             </tr>s
         </thead>
@@ -146,7 +140,7 @@
 </div>
 
 <div style="margin-top: 30px; padding: 20px; background: #f7fafc; border-radius: 10px;">
-    <h4 style="color: #2d3748; margin-bottom: 15px;">📊 Promedios por Partido</h4>
+    <h4 style="color: #2d3748; margin-bottom: 15px;"> Promedios por Partido</h4>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; color: #4a5568;">
         <div>
             <strong>Minutos:</strong> {{ (totales.minutos_totales / totales.partidos_jugados)|round(1) }}'
@@ -165,7 +159,7 @@
 
 {% else %}
 <div class="alert alert-info">
-    <strong>ℹ️ Sin estadísticas registradas</strong><br>
+    <strong>ℹSin estadísticas registradas</strong><br>
     Este jugador aún no tiene estadísticas en ningún partido.
 </div>
 <div style="text-align: center; margin-top: 30px;">

@@ -5,8 +5,8 @@
 {% block content %}
 <div style="margin-bottom: 20px;">
     <a href="/jugadores/html/lista" class="btn btn-secondary">← Volver a la Lista</a>
-    <a href="/jugadores/html/editar/{{ jugador.id }}" class="btn">✏️ Editar</a>
-    <a href="/estadisticas/html/jugador/{{ jugador.id }}" class="btn" style="background: #9f7aea;">📊 Ver Estadísticas</a>
+    <a href="/jugadores/html/editar/{{ jugador.id }}" class="btn">✏ Editar</a>
+    <a href="/estadisticas/html/jugador/{{ jugador.id }}" class="btn" style="background: #9f7aea;"> Ver Estadísticas</a>
 </div>
 
 <div style="display: grid; grid-template-columns: 250px 1fr; gap: 30px; margin-bottom: 30px;">
@@ -25,11 +25,11 @@
         </div>
         
         {% if jugador.estado.value == 'ACTIVO' %}
-        <span class="badge badge-success" style="font-size: 1.1em; padding: 10px 20px;">✅ {{ jugador.estado.value }}</span>
+        <span class="badge badge-success" style="font-size: 1.1em; padding: 10px 20px;"> {{ jugador.estado.value }}</span>
         {% elif jugador.estado.value == 'LESIONADO' %}
-        <span class="badge badge-warning" style="font-size: 1.1em; padding: 10px 20px;">🤕 {{ jugador.estado.value }}</span>
+        <span class="badge badge-warning" style="font-size: 1.1em; padding: 10px 20px;"> {{ jugador.estado.value }}</span>
         {% elif jugador.estado.value == 'SUSPENDIDO' %}
-        <span class="badge badge-danger" style="font-size: 1.1em; padding: 10px 20px;">🚫 {{ jugador.estado.value }}</span>
+        <span class="badge badge-danger" style="font-size: 1.1em; padding: 10px 20px;"> {{ jugador.estado.value }}</span>
         {% else %}
         <span class="badge" style="font-size: 1.1em; padding: 10px 20px;">{{ jugador.estado.value }}</span>
         {% endif %}
@@ -41,7 +41,7 @@
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             <div class="card">
-                <h3 style="color: #667eea; margin-bottom: 15px;">📋 Datos Personales</h3>
+                <h3 style="color: #667eea; margin-bottom: 15px;"> Datos Personales</h3>
                 <div style="color: #4a5568;">
                     <p><strong>Fecha de Nacimiento:</strong> {{ jugador.fecha_nacimiento.strftime('%d/%m/%Y') }}</p>
                     <p><strong>Edad:</strong> {{ (2024 - jugador.fecha_nacimiento.year) }} años</p>
@@ -52,7 +52,7 @@
             </div>
             
             <div class="card">
-                <h3 style="color: #667eea; margin-bottom: 15px;">⚽ Datos Deportivos</h3>
+                <h3 style="color: #667eea; margin-bottom: 15px;"> Datos Deportivos</h3>
                 <div style="color: #4a5568;">
                     <p><strong>Altura:</strong> {{ jugador.altura_cm }} cm</p>
                     <p><strong>Peso:</strong> {{ jugador.peso_kg }} kg</p>
@@ -68,7 +68,7 @@
 </div>
 
 <div class="card">
-    <h3 style="color: #667eea; margin-bottom: 20px;">📊 Resumen de Estadísticas</h3>
+    <h3 style="color: #667eea; margin-bottom: 20px;"> Resumen de Estadísticas</h3>
     
     {% if jugador.estadisticas %}
     <div class="stats-grid">
@@ -99,7 +99,7 @@
     
     <div style="text-align: center; margin-top: 20px;">
         <a href="/estadisticas/html/jugador/{{ jugador.id }}" class="btn" style="background: #9f7aea;">
-            📈 Ver Historial Completo
+             Ver Historial Completo
         </a>
     </div>
     {% else %}

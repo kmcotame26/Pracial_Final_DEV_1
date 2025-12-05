@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f5f6fc 0%, #c298ed 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -287,25 +287,25 @@
 
         <nav>
             <ul>
-                <li><a href="/">🏠 Inicio</a></li>
-                <li><a href="/jugadores/html/lista">👥 Jugadores</a></li>
-                <li><a href="/partidos/html/lista">⚽ Partidos</a></li>
-                <li><a href="/jugadores/html/crear">➕ Nuevo Jugador</a></li>
-                <li><a href="/partidos/html/crear">➕ Nuevo Partido</a></li>
-                <li><a href="/docs">📚 API Docs</a></li>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/jugadores/html/lista"> Jugadores</a></li>
+                <li><a href="/partidos/html/lista"> Partidos</a></li>
+                <li><a href="/jugadores/html/crear"> Nuevo Jugador</a></li>
+                <li><a href="/partidos/html/crear"> Nuevo Partido</a></li>
+                <li><a href="/docs">API Docs</a></li>
             </ul>
         </nav>
 
         <main>
             {% if error %}
             <div class="alert alert-error">
-                <strong>❌ Error:</strong> {{ error }}
+                <strong> Error:</strong> {{ error }}
             </div>
             {% endif %}
 
             {% if success %}
             <div class="alert alert-success">
-                <strong>✅ Éxito:</strong> {{ success }}
+                <strong> Éxito:</strong> {{ success }}
             </div>
             {% endif %}
 

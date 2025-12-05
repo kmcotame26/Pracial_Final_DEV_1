@@ -4,8 +4,8 @@
 
 {% block content %}
 <div style="margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;">
-    <h2 style="color: #2d3748;">👥 Plantel de Jugadores</h2>
-    <a href="/jugadores/html/crear" class="btn btn-success">➕ Nuevo Jugador</a>
+    <h2 style="color: #2d3748;"> Plantel de Jugadores</h2>
+    <a href="/jugadores/html/crear" class="btn btn-success"> Nuevo Jugador</a>
 </div>
 
 {% if jugadores %}
@@ -55,11 +55,11 @@
             <td>{{ jugador.nacionalidad }}</td>
             <td>
                 {% if jugador.estado.value == 'ACTIVO' %}
-                <span class="badge badge-success">✅ {{ jugador.estado.value }}</span>
+                <span class="badge badge-success"> {{ jugador.estado.value }}</span>
                 {% elif jugador.estado.value == 'LESIONADO' %}
-                <span class="badge badge-warning">🤕 {{ jugador.estado.value }}</span>
+                <span class="badge badge-warning"> {{ jugador.estado.value }}</span>
                 {% elif jugador.estado.value == 'SUSPENDIDO' %}
-                <span class="badge badge-danger">🚫 {{ jugador.estado.value }}</span>
+                <span class="badge badge-danger">{{ jugador.estado.value }}</span>
                 {% else %}
                 <span class="badge">{{ jugador.estado.value }}</span>
                 {% endif %}
@@ -79,7 +79,7 @@
     Comienza agregando tu primer jugador al plantel.
 </div>
 <div style="text-align: center; margin-top: 30px;">
-    <a href="/jugadores/html/crear" class="btn btn-success" style="font-size: 18px; padding: 15px 30px;">➕ Registrar Primer Jugador</a>
+    <a href="/jugadores/html/crear" class="btn btn-success" style="font-size: 18px; padding: 15px 30px;"> Registrar Primer Jugador</a>
 </div>
 {% endif %}
 {% endblock %}

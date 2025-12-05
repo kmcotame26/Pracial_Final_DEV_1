@@ -1,10 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Jugadores - sigmotaa FC{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;">
+    <h2 style="color: #2d3748;">👥 Plantel de Jugadores</h2>
+    <a href="/jugadores/html/crear" class="btn btn-success">➕ Nuevo Jugador</a>
+</div>
+
+{% if jugadores %}
+<div class="stats-grid" style="margin-bottom: 30px;">
+    <div class="stat-card">
+        <div class="stat-label">TOTAL</div>
+        <div class="stat-value">{{ jugadores|length }}</div>
+        <div class="stat-label">Jugadores</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-label">ACTIVOS</div>
+        <div class="stat-value">{{ jugadores|selectattr('estado.value', 'equalto', 'ACTIVO')|list|length }}</div>
+        <div class="stat-label">Jugadores</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-label">LESIONADOS</div>
+        <div class="stat-value">{{ jugadores|selectattr('estado.value', 'equalto', 'LESIONADO')|list|length }}</div>
+        <div class="stat-label">Jugadores</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-label">SUSPENDIDOS</div>
+        <div class="stat-value">{{ jugadores|selectattr('estado.value', 'equalto', 'SUSPENDIDO')|list|length }}</div>
+        <div class="stat-label">Jugadores</div>
+    </div>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Posición</th>
+            <th>Nacionalidad</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for jugador in jugadores|sort(attribute='numero_camiseta') %}
+        <tr>
+            <td><strong style="font-size: 1.2em; color: #667eea;">{{ jugador.numero_camiseta }}</strong></td>
+            <td>{{ jugador.nombre_completo }}</td>
+            <td>{{ jugador.posicion.value }}</td>
+            <td>{{ jugador.nacionalidad }}</td>
+            <td>
+                {% if jugador.estado.value == 'ACTIVO' %}
+                <span class="badge badge-success">✅ {{ jugador.estado.value }}</span>
+                {% elif jugador.estado.value == 'LESIONADO' %}
+                <span class="badge badge-warning">🤕 {{ jugador.estado.value }}</span>
+                {% elif jugador.estado.value == 'SUSPENDIDO' %}
+                <span class="badge badge-danger">🚫 {{ jugador.estado.value }}</span>
+                {% else %}
+                <span class="badge">{{ jugador.estado.value }}</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="/jugadores/html/detalle/{{ jugador.id }}" class="btn" style="padding: 8px 16px; font-size: 14px;">Ver Detalle</a>
+                <a href="/jugadores/html/editar/{{ jugador.id }}" class="btn btn-secondary" style="padding: 8px 16px; font-size: 14px;">Editar</a>
+                <a href="/estadisticas/html/jugador/{{ jugador.id }}" class="btn" style="padding: 8px 16px; font-size: 14px; background: #9f7aea;">📊 Stats</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="alert alert-info">
+    <strong>ℹ️ No hay jugadores registrados</strong><br>
+    Comienza agregando tu primer jugador al plantel.
+</div>
+<div style="text-align: center; margin-top: 30px;">
+    <a href="/jugadores/html/crear" class="btn btn-success" style="font-size: 18px; padding: 15px 30px;">➕ Registrar Primer Jugador</a>
+</div>
+{% endif %}
+{% endblock %}

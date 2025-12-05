@@ -1,10 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Editar Jugador - sigmotaa FC{% endblock %}
+
+{% block content %}
+<h2 style="color: #2d3748; margin-bottom: 30px;">✏️ Editar Jugador #{{ jugador.numero_camiseta }}</h2>
+
+<form method="post" action="/jugadores/html/editar/{{ jugador.id }}" style="max-width: 800px;">
+    <div style="background: #f7fafc; padding: 25px; border-radius: 10px; margin-bottom: 20px;">
+        <h3 style="color: #667eea; margin-bottom: 20px;">📋 Información Básica</h3>
+        
+        <div class="form-group">
+            <label for="nombre_completo">Nombre Completo *</label>
+            <input type="text" id="nombre_completo" name="nombre_completo" 
+                   value="{{ jugador.nombre_completo }}" required minlength="3" maxlength="100">
+        </div>
+        
+        <div class="form-group">
+            <label for="numero_camiseta">Número de Camiseta (1-99) *</label>
+            <input type="number" id="numero_camiseta" name="numero_camiseta" 
+                   value="{{ jugador.numero_camiseta }}" required min="1" max="99">
+        </div>
+        
+        <div class="form-group">
+            <label for="estado">Estado *</label>
+            <select id="estado" name="estado" required>
+                {% for est in estados %}
+                <option value="{{ est }}" {% if est == jugador.estado.value %}selected{% endif %}>
+                    {{ est }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    
+    <div style="display: flex; gap: 15px;">
+        <button type="submit" class="btn btn-success">✅ Guardar Cambios</button>
+        <a href="/jugadores/html/detalle/{{ jugador.id }}" class="btn btn-secondary">❌ Cancelar</a>
+    </div>
+</form>
+
+<div style="margin-top: 40px; padding: 20px; background: #fff5f5; border-radius: 10px; border-left: 4px solid #f56565;">
+    <h4 style="color: #742a2a; margin-bottom: 10px;">⚠️ Nota Importante</h4>
+    <p style="color: #742a2a;">
+        En esta versión simplificada solo puedes editar nombre, número y estado. 
+        Para modificar otros campos, considera agregar una funcionalidad completa de edición.
+    </p>
+</div>
+{% endblock %}

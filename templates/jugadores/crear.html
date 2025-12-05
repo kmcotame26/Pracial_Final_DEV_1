@@ -1,10 +1,108 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Nuevo Jugador - sigmotaa FC{% endblock %}
+
+{% block content %}
+<h2 style="color: #2d3748; margin-bottom: 30px;">➕ Registrar Nuevo Jugador</h2>
+
+<form method="post" action="/jugadores/html/crear" style="max-width: 800px;">
+    <div style="background: #f7fafc; padding: 25px; border-radius: 10px; margin-bottom: 20px;">
+        <h3 style="color: #667eea; margin-bottom: 20px;">📋 Datos Personales</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="nombre_completo">Nombre Completo *</label>
+                <input type="text" id="nombre_completo" name="nombre_completo" required minlength="3" maxlength="100">
+            </div>
+            
+            <div class="form-group">
+                <label for="numero_camiseta">Número de Camiseta (1-99) *</label>
+                <input type="number" id="numero_camiseta" name="numero_camiseta" required min="1" max="99">
+            </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="fecha_nacimiento">Fecha de Nacimiento *</label>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="nacionalidad">Nacionalidad *</label>
+                <input type="text" id="nacionalidad" name="nacionalidad" required maxlength="50" value="Colombia">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="fotografia_url">URL de Fotografía (opcional)</label>
+            <input type="url" id="fotografia_url" name="fotografia_url" placeholder="https://ejemplo.com/foto.jpg">
+        </div>
+    </div>
+    
+    <div style="background: #f7fafc; padding: 25px; border-radius: 10px; margin-bottom: 20px;">
+        <h3 style="color: #667eea; margin-bottom: 20px;">⚽ Datos Deportivos</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="altura_cm">Altura (cm) *</label>
+                <input type="number" id="altura_cm" name="altura_cm" required min="150" max="220" placeholder="175">
+            </div>
+            
+            <div class="form-group">
+                <label for="peso_kg">Peso (kg) *</label>
+                <input type="number" id="peso_kg" name="peso_kg" required min="50" max="120" step="0.1" placeholder="70.5">
+            </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="pie_dominante">Pie Dominante *</label>
+                <select id="pie_dominante" name="pie_dominante" required>
+                    <option value="">Seleccione...</option>
+                    {% for pie in pies %}
+                    <option value="{{ pie }}">{{ pie }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="posicion">Posición *</label>
+                <select id="posicion" name="posicion" required>
+                    <option value="">Seleccione...</option>
+                    {% for pos in posiciones %}
+                    <option value="{{ pos }}">{{ pos }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="valor_mercado">Valor de Mercado (opcional)</label>
+                <input type="number" id="valor_mercado" name="valor_mercado" min="0" step="0.01" placeholder="1000000">
+            </div>
+            
+            <div class="form-group">
+                <label for="anio_ingreso">Año de Ingreso *</label>
+                <input type="number" id="anio_ingreso" name="anio_ingreso" required min="1900" max="2100" value="2024">
+            </div>
+        </div>
+    </div>
+    
+    <div style="display: flex; gap: 15px;">
+        <button type="submit" class="btn btn-success">✅ Registrar Jugador</button>
+        <a href="/jugadores/html/lista" class="btn btn-secondary">❌ Cancelar</a>
+    </div>
+</form>
+
+<script>
+    // Validación adicional del formulario
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const numero = document.getElementById('numero_camiseta').value;
+        if (numero < 1 || numero > 99) {
+            e.preventDefault();
+            alert('El número de camiseta debe estar entre 1 y 99');
+        }
+    });
+</script>
+{% endblock %}

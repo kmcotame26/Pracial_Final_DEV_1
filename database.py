@@ -7,7 +7,7 @@ DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./sigmotaa_fc.db")
 
 # Ajuste para PostgreSQL en Railway/Render
 if DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
 
 # Configuración del engine
 connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
